@@ -13,6 +13,9 @@ public static String ForgotActivity="//android.widget.TextView[contains(@text, '
 public static String forgotBackBtn="//android.widget.ImageView[1]";
 public static String forgotBtn="//android.widget.TextView[contains(@text, 'Submit')]";
 public static String toastMessage="//android.widget.Toast[1]";
+public static String dashboardActivity="//android.widget.TextView[contains(@text, 'Home')]";
+public static String dashboardMenu="//android.widget.ImageView[1]";
+
 
 
 

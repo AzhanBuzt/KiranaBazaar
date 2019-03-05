@@ -108,7 +108,7 @@ public class MeraParceMainAppiumActivity {
                 .reportHeadline("Test automation report of Kirana Bazaar by Aaqib")
                 .insertCustomStyles(".test { border:2px solid #444; }");
 
-        Thread.sleep(3000);
+        Thread.sleep(4000);
     }
 
     @Test(priority = 1, groups = { "ui" })
@@ -522,7 +522,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=10,groups = { "functional"})
+    @Test(priority=10,groups = { "login"})
     public void Validate_SuccessfulLogin()
     {
         try {
@@ -532,8 +532,7 @@ public class MeraParceMainAppiumActivity {
             test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_SuccessfulLogin");
             test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
             if (driver.getConnection() != AIRPLANE) {
-                String currentActivity = driver.currentActivity();
-                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
                 driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
                 driver.findElement(By.xpath(editTextDynamic)).clear();
@@ -545,9 +544,21 @@ public class MeraParceMainAppiumActivity {
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(loginbtn)).click();
                 test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+                Thread.sleep(1000);
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                Thread.sleep(2000);
+                wait = new WebDriverWait(driver, 20);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+                test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             }
+
+
+
+
             else
                 {
                 test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
@@ -597,8 +608,8 @@ public class MeraParceMainAppiumActivity {
     public void sendEmail() throws Exception
     {
         Thread.sleep(5000);
-      // SendEmail obj= new SendEmail();
-     // obj.CreateEmail();
+        SendEmail obj= new SendEmail();
+        obj.CreateEmail();
     }
 
 
