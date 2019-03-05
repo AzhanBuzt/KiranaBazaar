@@ -12,6 +12,7 @@ public static String editPassDynamic="//android.widget.EditText[2]";
 public static String ForgotActivity="//android.widget.TextView[contains(@text, 'Forgot')]";
 public static String forgotBackBtn="//android.widget.ImageView[1]";
 public static String forgotBtn="//android.widget.TextView[contains(@text, 'Submit')]";
+public static String toastMessage="//android.widget.Toast[1]";
 
 
 

@@ -170,7 +170,7 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.INFO, "Step 4 : Button Login has been clicked successfully.");
             Thread.sleep(1000);
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
+            WebElement toastView = driver.findElement(By.xpath(toastMessage));
             test.log(LogStatus.INFO, "Step 5 : Toast Message text has been captured.");
             String es = toastView.getText();
             System.out.println(es);
@@ -217,7 +217,7 @@ public class MeraParceMainAppiumActivity {
                 test.log(LogStatus.INFO, "Step 4 : Button Login has been clicked successfully.");
                 Thread.sleep(1000);
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
+                WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 5 : Toast Message text has been captured.");
                 String es = toastView.getText();
                 System.out.println(es);
@@ -269,7 +269,7 @@ public class MeraParceMainAppiumActivity {
                     test.log(LogStatus.INFO, "Step " + i + " : " + iteration + " iteration of login button has been clicked.");
                     Thread.sleep(2500);
                     GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                    WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
+                    WebElement toastView = driver.findElement(By.xpath(toastMessage));
                     String es = toastView.getText();
                     System.out.println(es);
                     Assert.assertFalse(es.contains(properties.getProperty("verifyValidEmailFormat")));
@@ -383,7 +383,7 @@ public class MeraParceMainAppiumActivity {
                 test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
                 Thread.sleep(1000);
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
+                WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
                 String es = toastView.getText();
                 System.out.println(es);
@@ -413,43 +413,49 @@ public class MeraParceMainAppiumActivity {
             TestCaseDescription = objgetdata.GetData(0, 8, 3);
             test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_EmailFormat_WhileForgotPassword");
             test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
-            String currentActivity = driver.currentActivity();
-            Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
-            test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
-            driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-            wait = new WebDriverWait(driver, 20);
-            WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-            test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            ForgotLinkbtn.click();
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            String generatedString = RandomStringUtils.randomAlphabetic(10);
-            generatedString = generatedString.concat("#@gm.co.in");
-            System.out.println(generatedString);
-            Thread.sleep(1000);
-            driver.findElement(By.xpath(editTextDynamic)).clear();
-            test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            driver.findElement(By.xpath(editTextDynamic)).sendKeys(generatedString.trim());
-            test.log(LogStatus.INFO, "Step 5 :Invalid Email has been set successfully.");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            driver.findElement(By.xpath(forgotBtn)).click();
-            test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
-            test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
-            String es = toastView.getText();
-            System.out.println(es);
-            Assert.assertFalse(es.contains(properties.getProperty("verifyEmpty")));
-            test.log(LogStatus.PASS, "Step 8 : Toast Text has been verified as " + es);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            driver.findElement(By.xpath(forgotBackBtn)).click();
-            test.log(LogStatus.INFO, "Step 9 :Back button is clicked Successfully.");
-            Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
-            test.log(LogStatus.INFO, "Step 10 :User is back at Login Activity.");
+            if (driver.getConnection() != AIRPLANE) {
+                String currentActivity = driver.currentActivity();
+                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                wait = new WebDriverWait(driver, 20);
+                WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                ForgotLinkbtn.click();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                String generatedString = RandomStringUtils.randomAlphabetic(10);
+                generatedString = generatedString.concat("#@gm.co.in");
+                System.out.println(generatedString);
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(generatedString.trim());
+                test.log(LogStatus.INFO, "Step 5 :Invalid Email has been set successfully.");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(forgotBtn)).click();
+                test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                WebElement toastView = driver.findElement(By.xpath(toastMessage));
+                test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
+                String es = toastView.getText();
+                System.out.println(es);
+                Assert.assertFalse(es.contains(properties.getProperty("verifyEmpty")));
+                test.log(LogStatus.PASS, "Step 8 : Toast Text has been verified as " + es);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(forgotBackBtn)).click();
+                test.log(LogStatus.INFO, "Step 9 :Back button is clicked Successfully.");
+                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 10 :User is back at Login Activity.");
+            }
+            else{
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
 
         }
         catch (Exception e){
@@ -467,45 +473,92 @@ public class MeraParceMainAppiumActivity {
             TestCaseDescription = objgetdata.GetData(0, 9, 3);
             test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_EmailSentToUser_WhileForgotPassword");
             test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
-            String currentActivity = driver.currentActivity();
-            Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
-            test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
-            driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-            wait = new WebDriverWait(driver, 20);
-            WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-            test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            ForgotLinkbtn.click();
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            Thread.sleep(1000);
-            driver.findElement(By.xpath(editTextDynamic)).clear();
-            test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
-            driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
-            test.log(LogStatus.INFO, "Step 5 :Valid Forgot Email has been set successfully.");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            driver.findElement(By.xpath(forgotBtn)).click();
-            test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
-            Thread.sleep(1000);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            WebElement toastView = driver.findElement(By.xpath("//android.widget.Toast[1]"));
-            test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
-            String es = toastView.getText();
-            System.out.println(es);
-            Assert.assertTrue(es.contains(properties.getProperty("forgotPassword")));
-            test.log(LogStatus.PASS, "Step 8 : Toast Text has been verified as " + es);
-            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            driver.findElement(By.xpath(forgotBackBtn)).click();
-            test.log(LogStatus.INFO, "Step 9 :Back button is clicked Successfully.");
-            Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
-            test.log(LogStatus.INFO, "Step 10 :User is back at Login Activity.");
-
+            if (driver.getConnection() != AIRPLANE) {
+                String currentActivity = driver.currentActivity();
+                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                wait = new WebDriverWait(driver, 20);
+                WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                ForgotLinkbtn.click();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                test.log(LogStatus.INFO, "Step 5 :Valid Forgot Email has been set successfully.");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(forgotBtn)).click();
+                test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                WebElement toastView = driver.findElement(By.xpath(toastMessage));
+                test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
+                String es = toastView.getText();
+                System.out.println(es);
+                Assert.assertTrue(es.equals(properties.getProperty("forgotPassword")));
+                test.log(LogStatus.PASS, "Step 8 : Toast Text has been verified as " + es);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                Thread.sleep(2500);
+                driver.findElement(By.xpath(forgotBackBtn)).click();
+                test.log(LogStatus.INFO, "Step 9 :Back button is clicked Successfully.");
+                Thread.sleep(1000);
+                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 10 :User is back at Login Activity.");
+            }
+            else
+                {
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
         }
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
         }
+    }
+
+    @Test(priority=10,groups = { "functional"})
+    public void Validate_SuccessfulLogin()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 10, 1);
+            TestCaseType = objgetdata.GetData(0, 10, 2);
+            TestCaseDescription = objgetdata.GetData(0, 10, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_SuccessfulLogin");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if (driver.getConnection() != AIRPLANE) {
+                String currentActivity = driver.currentActivity();
+                Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editPassDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(loginbtn)).click();
+                test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                Thread.sleep(2000);
+            }
+            else
+                {
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e){
+            String ex=e.getMessage();
+            System.out.println(ex);
+        }
+
     }
 
     @AfterMethod(alwaysRun = true)
