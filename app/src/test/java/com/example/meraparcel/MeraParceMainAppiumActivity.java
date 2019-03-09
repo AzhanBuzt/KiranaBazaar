@@ -1,28 +1,14 @@
 package com.example.meraparcel;
-
-
-
-
-
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
-
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
-
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-
-import io.appium.java_client.MobileBy;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -33,24 +19,15 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
-
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import excelSupport.DatafromExcel;
-
 import utility.*;
-
-
-
 import static com.example.meraparcel.Locators.*;
-
 import static io.appium.java_client.android.Connection.AIRPLANE;
-
-
 
 public class MeraParceMainAppiumActivity {
 
@@ -75,8 +52,7 @@ public class MeraParceMainAppiumActivity {
         reader = new BufferedReader(new FileReader(propertyFilePath));
         properties = new Properties();
         properties.load(reader);
-
-        // Created object of DesiredCapabilities class.
+         // Created object of DesiredCapabilities class.
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
 
@@ -150,6 +126,8 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
     }
 
@@ -193,7 +171,8 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
 }
 
@@ -238,6 +217,8 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
 
     }
@@ -296,6 +277,8 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
 
     }
@@ -321,6 +304,8 @@ public class MeraParceMainAppiumActivity {
     {
         String ex=e.getMessage();
         System.out.println(ex);
+        test.log(LogStatus.SKIP, "Test Case Skipped");
+        driver.resetApp();
     }
     }
 
@@ -355,6 +340,8 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
         String ex=e.getMessage();
         System.out.println(ex);
+        test.log(LogStatus.SKIP, "Test Case Skipped");
+        driver.resetApp();
     }}
 
     @Test(priority=7,groups = { "functional"})
@@ -407,6 +394,8 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }}
 
     @Test(priority=8,groups = { "functional"})
@@ -466,10 +455,12 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
     }
 
-    @Test(priority=9,groups = { "functional"})
+    @Test(priority=9,groups = { "functional1"})
     public void Validate_EmailSentToUser_WhileForgotPassword()
     {
         try {
@@ -524,6 +515,8 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
     }
 
@@ -565,11 +558,12 @@ public class MeraParceMainAppiumActivity {
                 int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
                 int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
                 test.log(LogStatus.INFO, "Step 7 :Dynamic co-ordinates location has been fetched successfully");
-                TouchAction actions = new TouchAction(driver);
+                TouchAction actions= new TouchAction(driver);
                 actions.press(x1,y1).waitAction(1000).moveTo(x,y).release().perform();
                 test.log(LogStatus.INFO, "Step 8 :Menu item has been scrolled successfully");
                 driver.findElement(By.xpath(logoutMenu)).click();
-                test.log(LogStatus.INFO, "Step 9 :Application has been logged out successfully");
+                test.log(LogStatus.PASS, "Step 9 :Application has been logged out successfully");
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 Thread.sleep(1000);
 
             }
@@ -582,10 +576,116 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
 
     }
 
+    @Test(priority=11,groups = { "login"})
+    public void Navigate_AllMenuItems()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 11, 1);
+            TestCaseType = objgetdata.GetData(0, 11, 2);
+            TestCaseDescription = objgetdata.GetData(0, 11, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Navigate_AllMenuItems");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if (driver.getConnection() != AIRPLANE) {
+                wait = new WebDriverWait(driver, 20);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editPassDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(loginbtn)).click();
+                test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+                test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(homeMenu)).click();
+                Thread.sleep(1000);
+                test.log(LogStatus.INFO, "Step 7 :Home Menu has been clicked successfully");
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(orderMenu)).click();
+                test.log(LogStatus.INFO, "Step 8 :My Order Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(cartMenu)).click();
+                test.log(LogStatus.INFO, "Step 9 :Cart Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(2000);
+                driver.findElement(By.xpath(contactUsMenu)).click();
+                Thread.sleep(2000);
+                test.log(LogStatus.INFO, "Step 10 :Contact Us Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                TouchAction actions= new TouchAction(driver);
+                actions.tap(150,72).waitAction(1000).perform().release();
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(feedBackMenu)).click();
+                test.log(LogStatus.INFO, "Step 11 :FeedBack Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editProfileMenu)).click();
+                test.log(LogStatus.INFO, "Step 12 :Edit Profile Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
+                int y1=driver.findElement(By.xpath(shareAppMenu)).getLocation().y;
+                int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
+                int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
+                TouchAction actions1= new TouchAction(driver);
+                actions1.press(x1,y1).waitAction(2000).moveTo(x,y).release().perform();
+                driver.findElement(By.xpath(shareAppMenu)).click();
+                test.log(LogStatus.INFO, "Step 13 :Share App Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                Thread.sleep(2000);
+                TouchAction actions2= new TouchAction(driver);
+                actions2.tap(150,72).waitAction(1000).perform().release();
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(notificationMenu)).click();
+                test.log(LogStatus.INFO, "Step 14 :Notification Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(notificationBack)).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(logoutMenu)).click();
+                test.log(LogStatus.PASS, "Step 15 :Logout Menu has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Thread.sleep(1000);
+            }
+            else
+            {
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e){
+            String ex=e.getMessage();
+            System.out.println(ex);
+        }
+
+    }
 
     @AfterMethod(alwaysRun = true)
     public void teardown(ITestResult result) throws Exception
