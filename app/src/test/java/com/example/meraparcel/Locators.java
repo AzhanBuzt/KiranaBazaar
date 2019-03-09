@@ -18,7 +18,13 @@ public static String dashboardMenu="//android.widget.ImageView[1]";
 public static String homeMenu="//android.widget.TextView[contains(@text, 'Home')]";
 public static String shareAppMenu="//android.widget.TextView[contains(@text, 'Share App')]";
 public static String logoutMenu="//android.widget.TextView[contains(@text, 'Logout')]";
-public static String scrollBar="//android.widget.ScrollView[1]";
+public static String orderMenu="//android.widget.TextView[contains(@text, 'My Orders')]";
+public static String cartMenu="//android.widget.TextView[contains(@text, 'Cart')]";
+public static String contactUsMenu="//android.widget.TextView[contains(@text, 'Contact Us')]";
+public static String feedBackMenu="//android.widget.TextView[contains(@text, 'FeedBack')]";
+public static String editProfileMenu="//android.widget.TextView[contains(@text, 'Edit Profile')]";
+public static String notificationMenu="//android.widget.TextView[contains(@text, 'Notification')]";
+public static String notificationBack="//android.widget.ImageButton[@content-desc='Navigate up']";
 
 
 
