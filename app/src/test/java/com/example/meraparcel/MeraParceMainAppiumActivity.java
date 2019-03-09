@@ -13,9 +13,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+
+import io.appium.java_client.MobileBy;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -32,9 +37,11 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import excelSupport.DatafromExcel;
+
 import utility.*;
 
 
@@ -94,9 +101,7 @@ public class MeraParceMainAppiumActivity {
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
         capabilities.setCapability("autoGrantPermissions", "true");
         capabilities.setCapability("autoAcceptAlerts", "true");
-
         driver=new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         objgetdata=new DatafromExcel(properties.getProperty("excelSheetPath"));
         report= new ExtentReports(properties.getProperty("extentReportPath"),true);
@@ -552,18 +557,27 @@ public class MeraParceMainAppiumActivity {
                 test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(dashboardMenu)).click();
+                test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
                 Thread.sleep(1000);
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
+                int y1=driver.findElement(By.xpath(shareAppMenu)).getLocation().y;
+                int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
+                int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
+                test.log(LogStatus.INFO, "Step 7 :Dynamic co-ordinates location has been fetched successfully");
+                TouchAction actions = new TouchAction(driver);
+                actions.press(x1,y1).waitAction(1000).moveTo(x,y).release().perform();
+                test.log(LogStatus.INFO, "Step 8 :Menu item has been scrolled successfully");
+                driver.findElement(By.xpath(logoutMenu)).click();
+                test.log(LogStatus.INFO, "Step 9 :Application has been logged out successfully");
+                Thread.sleep(1000);
+
             }
-
-
-
-
             else
                 {
                 test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
                 test.log(LogStatus.SKIP, "Test Case Skipped");
-            }
+                }
         }
         catch (Exception e){
             String ex=e.getMessage();
@@ -571,6 +585,7 @@ public class MeraParceMainAppiumActivity {
         }
 
     }
+
 
     @AfterMethod(alwaysRun = true)
     public void teardown(ITestResult result) throws Exception
@@ -607,9 +622,9 @@ public class MeraParceMainAppiumActivity {
     @AfterSuite(alwaysRun = true)
     public void sendEmail() throws Exception
     {
-        Thread.sleep(5000);
-        SendEmail obj= new SendEmail();
-        obj.CreateEmail();
+        //Thread.sleep(5000);
+       // SendEmail obj= new SendEmail();
+       // obj.CreateEmail();
     }
 
 
