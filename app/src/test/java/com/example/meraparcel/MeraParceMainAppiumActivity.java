@@ -40,7 +40,7 @@ public class MeraParceMainAppiumActivity {
     public String TestCaseName,TestCaseType,TestCaseDescription;
     private Properties properties;
     BufferedReader reader;
-    private final String propertyFilePath= "C:/Users/Aaqib/AndroidStudioProjects/MeraParcel/app/src/test/java/utility/Data.properties";
+    private final String propertyFilePath= "../app/src/test/java/utility/Data.properties";
     int iteration=1;
 
 
