@@ -25,6 +25,10 @@ public static String feedBackMenu="//android.widget.TextView[contains(@text, 'Fe
 public static String editProfileMenu="//android.widget.TextView[contains(@text, 'Edit Profile')]";
 public static String notificationMenu="//android.widget.TextView[contains(@text, 'Notification')]";
 public static String notificationBack="//android.widget.ImageButton[@content-desc='Navigate up']";
+public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsApp')]";
+public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
+
+
 
 
 
