@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -28,6 +29,8 @@ import excelSupport.DatafromExcel;
 import utility.*;
 import static com.example.meraparcel.Locators.*;
 import static io.appium.java_client.android.Connection.AIRPLANE;
+import static utility.capability.*;
+
 
 public class MeraParceMainAppiumActivity {
 
@@ -47,30 +50,24 @@ public class MeraParceMainAppiumActivity {
     @BeforeTest(alwaysRun = true)
     public void setUp() throws Exception
     {
-
         //Loading Property Details
         reader = new BufferedReader(new FileReader(propertyFilePath));
         properties = new Properties();
         properties.load(reader);
          // Created object of DesiredCapabilities class.
         DesiredCapabilities capabilities = new DesiredCapabilities();
-
-
-
-        // Set android deviceName desired capability. Set your device name.
-        capabilities.setCapability("deviceName", "Nokia 6");
+       // Set android deviceName desired capability. Set your device name.
+        capabilities.setCapability("deviceName", deviceName);
 
         // Set BROWSER_NAME desired capability. It's Android in our case here.
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
 
         // Set android VERSION desired capability. Set your mobile device's OS version.
-        capabilities.setCapability(CapabilityType.VERSION, "8.1.0");
-
-
-        // Set android platformName desired capability. It's Android in our case here.
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("appPackage", "com.ecommerce.mugh");
-        capabilities.setCapability("appActivity", ".Splash");
+        capabilities.setCapability(CapabilityType.VERSION, deviceVersion);
+      // Set android platformName desired capability. It's Android in our case here.
+        capabilities.setCapability("platformName", platformName);
+        capabilities.setCapability("appPackage", appPackage);
+        capabilities.setCapability("appActivity", appActivity);
         capabilities.setCapability("unicodeKeyboard", true);
         capabilities.setCapability("resetKeyboard", true);
         capabilities.setCapability("automationName", "uiautomator2");
@@ -683,6 +680,98 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
+        }
+
+    }
+
+    @Test(priority=12,groups = { "share"})
+    public void Application_Share_Through_WhatsApp()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 12, 1);
+            TestCaseType = objgetdata.GetData(0, 12, 2);
+            TestCaseDescription = objgetdata.GetData(0, 12, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Application_Share_Through_WhatsApp");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if (driver.getConnection() != AIRPLANE) {
+                wait = new WebDriverWait(driver, 20);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editPassDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(loginbtn)).click();
+                test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+                test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(shareAppMenu)).click();
+                test.log(LogStatus.INFO, "Step 7 :Share App Menu has been clicked successfully");
+                Thread.sleep(3000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(whatsApp)));
+                test.log(LogStatus.INFO, "Step 8 :Social Media Element WhatsApp has been found successfully");
+                Thread.sleep(1000);
+                driver.findElement(By.xpath(whatsApp)).click();
+                test.log(LogStatus.INFO, "Step 9 :WhatsApp has been clicked successfully");
+                Thread.sleep(1000);
+                TouchAction actions= new TouchAction(driver);
+                actions.tap(50,567).release().perform();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                test.log(LogStatus.INFO, "Step 10 :Most frequent contacted on whatsApp has been clicked successfully");
+                Thread.sleep(2000);
+                driver.findElement(By.xpath(whatsAppImageButton)).click();
+                test.log(LogStatus.INFO, "Step 10 :WhatsApp Send has been clicked successfully");
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                System.out.println(driver.findElement(By.xpath(editTextDynamic)).getText());
+                Thread.sleep(1000);
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                driver.findElement(By.xpath(whatsAppImageButton)).click();
+                test.log(LogStatus.PASS, "Step 11 :Share Link has been shared successfully");
+                driver.pressKeyCode(AndroidKeyCode.BACK);
+                Thread.sleep(1000);
+                driver.pressKeyCode(AndroidKeyCode.BACK);
+                test.log(LogStatus.INFO, "Step 12 :Focus has been moved to Kirana Bazaar from WhatsApp successfully");
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
+                int y1=driver.findElement(By.xpath(shareAppMenu)).getLocation().y;
+                int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
+                int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
+                TouchAction actions2= new TouchAction(driver);
+                actions2.press(x1,y1).waitAction(1000).moveTo(x,y).release().perform();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                test.log(LogStatus.INFO, "Step 13 :Menu item has been scrolled successfully");
+                driver.findElement(By.xpath(logoutMenu)).click();
+                test.log(LogStatus.INFO, "Step 14 :Application has been logged out successfully");
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Thread.sleep(1000);
+             }
+            else
+            {
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e){
+            String ex=e.getMessage();
+            System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
         }
 
     }
