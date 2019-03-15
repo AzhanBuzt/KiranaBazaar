@@ -4,10 +4,10 @@
   <test name="UI Test Run">
 <groups><run>
 <include name="ui" />
-    <include name="functional" />
-    <include name="navigation" />
-    <include name="login" />
-    <include name="share" />
+<include name="functional" />
+<include name="navigation" />
+<include name="login" />
+<include name="share" />
 </run></groups>
     <classes>
       <class name="com.example.meraparcel.MeraParceMainAppiumActivity"/>
