@@ -68,12 +68,12 @@ public class MeraParceMainAppiumActivity {
         capabilities.setCapability("platformName", platformName);
         capabilities.setCapability("appPackage", appPackage);
         capabilities.setCapability("appActivity", appActivity);
-        capabilities.setCapability("unicodeKeyboard", true);
-        capabilities.setCapability("resetKeyboard", true);
-        capabilities.setCapability("automationName", "uiautomator2");
-        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
-        capabilities.setCapability("autoGrantPermissions", "true");
-        capabilities.setCapability("autoAcceptAlerts", "true");
+        capabilities.setCapability("unicodeKeyboard", t);
+        capabilities.setCapability("resetKeyboard", t);
+        capabilities.setCapability("automationName", uiAutomator2);
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, uiAutomator2);
+        capabilities.setCapability("autoGrantPermissions", t);
+        capabilities.setCapability("autoAcceptAlerts", t);
         driver=new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         objgetdata=new DatafromExcel(properties.getProperty("excelSheetPath"));
