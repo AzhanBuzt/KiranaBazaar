@@ -15,6 +15,7 @@ public static String forgotBtn="//android.widget.TextView[contains(@text, 'Submi
 public static String toastMessage="//android.widget.Toast[1]";
 public static String dashboardActivity="//android.widget.TextView[contains(@text, 'Home')]";
 public static String dashboardMenu="//android.widget.ImageView[1]";
+public static String itemText= "//android.widget.TextView";
 public static String homeMenu="//android.widget.TextView[contains(@text, 'Home')]";
 public static String shareAppMenu="//android.widget.TextView[contains(@text, 'Share App')]";
 public static String logoutMenu="//android.widget.TextView[contains(@text, 'Logout')]";
@@ -27,6 +28,7 @@ public static String notificationMenu="//android.widget.TextView[contains(@text,
 public static String notificationBack="//android.widget.ImageButton[@content-desc='Navigate up']";
 public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsApp')]";
 public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
+public static String searchBackBtn="//android.widget.ImageView[1]";
 
 
 

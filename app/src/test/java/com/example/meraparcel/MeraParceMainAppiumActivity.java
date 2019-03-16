@@ -457,7 +457,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=9,groups = { "functional"})
+    @Test(priority=9,groups = { "functional1"})
     public void Validate_EmailSentToUser_WhileForgotPassword()
     {
         try {
@@ -761,6 +761,93 @@ public class MeraParceMainAppiumActivity {
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
              }
+            else
+            {
+                test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e){
+            String ex=e.getMessage();
+            System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
+        }
+
+    }
+
+    @Test(priority=14,groups = { "search"})
+    public void Positive_Negative_Search()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 14, 1);
+            TestCaseType = objgetdata.GetData(0, 14, 2);
+            TestCaseDescription = objgetdata.GetData(0, 14, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Positive_Negative_Search");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if (driver.getConnection() != AIRPLANE) {
+                wait = new WebDriverWait(driver, 10);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editPassDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                driver.findElement(By.xpath(loginbtn)).click();
+                test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+                test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
+                TouchAction searchIcon= new TouchAction(driver);
+                searchIcon.tap(810,102).release().perform();
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                test.log(LogStatus.INFO, "Step 6 :Search icon has been clicked Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("positiveSearchValue").trim());
+                test.log(LogStatus.INFO, "Step 7 :Positive search text has been passed Successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                TouchAction searchIconValid= new TouchAction(driver);
+                searchIconValid.tap(945,102).release().perform();
+                test.log(LogStatus.INFO, "Step 8 :Search icon has been clicked Successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                int positiveSearchResult=driver.findElements(By.xpath(itemText)).size();
+                Assert.assertEquals(positiveSearchResult,8);
+                test.log(LogStatus.INFO, "Step 9 :Search result has been verified Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("negativeSearchValue").trim());
+                test.log(LogStatus.INFO, "Step 10 :Negative search text has been passed Successfully");
+                TouchAction searchIconInvalid= new TouchAction(driver);
+                searchIconInvalid.tap(945,102).release().perform();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                test.log(LogStatus.INFO, "Step 11 :Search icon has been clicked Successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
+                int negativeSearchResult=driver.findElements(By.xpath(itemText)).size();
+                Assert.assertEquals(negativeSearchResult,0);
+                test.log(LogStatus.INFO, "Step 12 :Search result has been verified Successfully");
+                driver.findElement(By.xpath(searchBackBtn)).click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
+                int y1=driver.findElement(By.xpath(shareAppMenu)).getLocation().y;
+                int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
+                int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
+                TouchAction actions2= new TouchAction(driver);
+                actions2.press(x1,y1).waitAction(Integer.parseInt(properties.getProperty("minWait"))).moveTo(x,y).release().perform();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                test.log(LogStatus.INFO, "Step 13 :Menu item has been scrolled successfully");
+                driver.findElement(By.xpath(logoutMenu)).click();
+                test.log(LogStatus.INFO, "Step 14 :Application has been logged out successfully");
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            }
             else
             {
                 test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of "+driver.getConnection());
