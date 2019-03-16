@@ -68,12 +68,12 @@ public class MeraParceMainAppiumActivity {
         capabilities.setCapability("platformName", platformName);
         capabilities.setCapability("appPackage", appPackage);
         capabilities.setCapability("appActivity", appActivity);
-        capabilities.setCapability("unicodeKeyboard", true);
-        capabilities.setCapability("resetKeyboard", true);
-        capabilities.setCapability("automationName", "uiautomator2");
-        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
-        capabilities.setCapability("autoGrantPermissions", "true");
-        capabilities.setCapability("autoAcceptAlerts", "true");
+        capabilities.setCapability("unicodeKeyboard", t);
+        capabilities.setCapability("resetKeyboard", t);
+        capabilities.setCapability("automationName", uiAutomator2);
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, uiAutomator2);
+        capabilities.setCapability("autoGrantPermissions", t);
+        capabilities.setCapability("autoAcceptAlerts", t);
         driver=new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         objgetdata=new DatafromExcel(properties.getProperty("excelSheetPath"));
@@ -145,10 +145,10 @@ public class MeraParceMainAppiumActivity {
             driver.findElement(By.xpath(editPassDynamic)).clear();
             test.log(LogStatus.INFO, "Step 3 : Email Textbox is empty now.");
             //clicking the login btn
-            Thread.sleep(500);
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             driver.findElement(By.xpath(loginbtn)).click();
             test.log(LogStatus.INFO, "Step 4 : Button Login has been clicked successfully.");
-            Thread.sleep(1000);
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             WebElement toastView = driver.findElement(By.xpath(toastMessage));
             test.log(LogStatus.INFO, "Step 5 : Toast Message text has been captured.");
@@ -193,10 +193,10 @@ public class MeraParceMainAppiumActivity {
                 test.log(LogStatus.INFO, "Step 4 : Valid Email has been inserted.");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 //clicking the login btn
-                Thread.sleep(500);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 test.log(LogStatus.INFO, "Step 4 : Button Login has been clicked successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 5 : Toast Message text has been captured.");
@@ -246,11 +246,11 @@ public class MeraParceMainAppiumActivity {
                     driver.findElement(By.xpath(editTextDynamic)).sendKeys(generatedString);
                     test.log(LogStatus.INFO, "Step " + i + " : " + iteration + " iteration of invalid Email has been inserted.");
                     GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                    Thread.sleep(500);
+                    Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                     driver.findElement(By.xpath(loginbtn)).click();
                     //clicking the login btn
                     test.log(LogStatus.INFO, "Step " + i + " : " + iteration + " iteration of login button has been clicked.");
-                    Thread.sleep(2500);
+                    Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                     GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                     WebElement toastView = driver.findElement(By.xpath(toastMessage));
                     String es = toastView.getText();
@@ -319,16 +319,16 @@ public class MeraParceMainAppiumActivity {
             Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
             test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
             driver.manage().timeouts().implicitlyWait(2,TimeUnit.SECONDS);
-            wait = new WebDriverWait(driver, 20);
+            wait = new WebDriverWait(driver, 10);
             WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
             test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
-            Thread.sleep(1000);
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             ForgotLinkbtn.click();
             test.log(LogStatus.INFO, "Step 4 :ForgotLink button is clicked Successfully");
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-            WebElement fActivity = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(ForgotActivity)));
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(ForgotActivity)));
             test.log(LogStatus.INFO, "Step 5 :Forgot Activity is visible on App screen.");
-            Thread.sleep(1000);
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             driver.findElement(By.xpath(forgotBackBtn)).click();
             test.log(LogStatus.INFO, "Step 6 :Back button is clicked Successfully.");
             Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
@@ -362,7 +362,7 @@ public class MeraParceMainAppiumActivity {
                 wait = new WebDriverWait(driver, 20);
                 WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 test.log(LogStatus.INFO, "Step 4 :ForgotLink button is visible on Login Activity");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 ForgotLinkbtn.click();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
@@ -370,7 +370,7 @@ public class MeraParceMainAppiumActivity {
                 test.log(LogStatus.INFO, "Step 5 :Forgot password has been cleared successfully.");
                 driver.findElement(By.xpath(forgotBtn)).click();
                 test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
@@ -412,24 +412,24 @@ public class MeraParceMainAppiumActivity {
                 wait = new WebDriverWait(driver, 20);
                 WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 ForgotLinkbtn.click();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 String generatedString = RandomStringUtils.randomAlphabetic(10);
                 generatedString = generatedString.concat("#@gm.co.in");
                 System.out.println(generatedString);
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(generatedString.trim());
                 test.log(LogStatus.INFO, "Step 5 :Invalid Email has been set successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(forgotBtn)).click();
                 test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
@@ -457,7 +457,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=9,groups = { "functional1"})
+    @Test(priority=9,groups = { "functional"})
     public void Validate_EmailSentToUser_WhileForgotPassword()
     {
         try {
@@ -471,23 +471,23 @@ public class MeraParceMainAppiumActivity {
                 Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
                 driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-                wait = new WebDriverWait(driver, 20);
+                wait = new WebDriverWait(driver, 10);
                 WebElement ForgotLinkbtn = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 test.log(LogStatus.INFO, "Step 3 :ForgotLink button is visible on Login Activity");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 ForgotLinkbtn.click();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 test.log(LogStatus.INFO, "Step 4 :Forgot password has been cleared successfully.");
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
                 test.log(LogStatus.INFO, "Step 5 :Valid Forgot Email has been set successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(forgotBtn)).click();
                 test.log(LogStatus.INFO, "Step 6 :Forgot button has been clicked successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
@@ -496,10 +496,10 @@ public class MeraParceMainAppiumActivity {
                 Assert.assertTrue(es.equals(properties.getProperty("forgotPassword")));
                 test.log(LogStatus.PASS, "Step 8 : Toast Text has been verified as " + es);
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                Thread.sleep(2500);
+                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                 driver.findElement(By.xpath(forgotBackBtn)).click();
                 test.log(LogStatus.INFO, "Step 9 :Back button is clicked Successfully.");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 Assert.assertTrue(currentActivity.equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 10 :User is back at Login Activity.");
             }
@@ -529,26 +529,26 @@ public class MeraParceMainAppiumActivity {
             if (driver.getConnection() != AIRPLANE) {
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
-                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 driver.findElement(By.xpath(editPassDynamic)).clear();
                 test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                wait = new WebDriverWait(driver, 20);
+                wait = new WebDriverWait(driver, 10);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
                 test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(dashboardMenu)).click();
                 test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
                 int y1=driver.findElement(By.xpath(shareAppMenu)).getLocation().y;
@@ -556,12 +556,12 @@ public class MeraParceMainAppiumActivity {
                 int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
                 test.log(LogStatus.INFO, "Step 7 :Dynamic co-ordinates location has been fetched successfully");
                 TouchAction actions= new TouchAction(driver);
-                actions.press(x1,y1).waitAction(1000).moveTo(x,y).release().perform();
+                actions.press(x1,y1).waitAction(Integer.parseInt(properties.getProperty("minWait"))).moveTo(x,y).release().perform();
                 test.log(LogStatus.INFO, "Step 8 :Menu item has been scrolled successfully");
                 driver.findElement(By.xpath(logoutMenu)).click();
                 test.log(LogStatus.PASS, "Step 9 :Application has been logged out successfully");
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
 
             }
             else
@@ -589,58 +589,58 @@ public class MeraParceMainAppiumActivity {
             test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Navigate_AllMenuItems");
             test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
             if (driver.getConnection() != AIRPLANE) {
-                wait = new WebDriverWait(driver, 20);
+                wait = new WebDriverWait(driver, 10);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
-                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 driver.findElement(By.xpath(editPassDynamic)).clear();
                 test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
                 test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(dashboardMenu)).click();
                 test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(homeMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 test.log(LogStatus.INFO, "Step 7 :Home Menu has been clicked successfully");
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(orderMenu)).click();
                 test.log(LogStatus.INFO, "Step 8 :My Order Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(cartMenu)).click();
                 test.log(LogStatus.INFO, "Step 9 :Cart Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(2000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
                 driver.findElement(By.xpath(contactUsMenu)).click();
-                Thread.sleep(2000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
                 test.log(LogStatus.INFO, "Step 10 :Contact Us Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 TouchAction actions= new TouchAction(driver);
-                actions.tap(150,72).waitAction(1000).perform().release();
+                actions.tap(150,72).waitAction(Integer.parseInt(properties.getProperty("minWait"))).perform().release();
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(feedBackMenu)).click();
                 test.log(LogStatus.INFO, "Step 11 :FeedBack Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editProfileMenu)).click();
                 test.log(LogStatus.INFO, "Step 12 :Edit Profile Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
@@ -654,22 +654,22 @@ public class MeraParceMainAppiumActivity {
                 driver.findElement(By.xpath(shareAppMenu)).click();
                 test.log(LogStatus.INFO, "Step 13 :Share App Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                Thread.sleep(2000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
                 TouchAction actions2= new TouchAction(driver);
-                actions2.tap(150,72).waitAction(1000).perform().release();
+                actions2.tap(150,72).waitAction(Integer.parseInt(properties.getProperty("minWait"))).perform().release();
                 driver.findElement(By.xpath(dashboardMenu)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(notificationMenu)).click();
                 test.log(LogStatus.INFO, "Step 14 :Notification Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(notificationBack)).click();
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(logoutMenu)).click();
                 test.log(LogStatus.PASS, "Step 15 :Logout Menu has been clicked successfully");
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             }
             else
             {
@@ -696,55 +696,55 @@ public class MeraParceMainAppiumActivity {
             test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Application_Share_Through_WhatsApp");
             test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
             if (driver.getConnection() != AIRPLANE) {
-                wait = new WebDriverWait(driver, 20);
+                wait = new WebDriverWait(driver, 10);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
                 test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
-                driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 driver.findElement(By.xpath(editPassDynamic)).clear();
                 test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
                 Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
                 test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as "+driver.currentActivity());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(dashboardMenu)).click();
                 test.log(LogStatus.INFO, "Step 6 :Dashboard icon has been clicked successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(shareAppMenu)).click();
                 test.log(LogStatus.INFO, "Step 7 :Share App Menu has been clicked successfully");
-                Thread.sleep(3000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("midMaxWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(whatsApp)));
                 test.log(LogStatus.INFO, "Step 8 :Social Media Element WhatsApp has been found successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(whatsApp)).click();
                 test.log(LogStatus.INFO, "Step 9 :WhatsApp has been clicked successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
                 TouchAction actions= new TouchAction(driver);
                 actions.tap(50,567).release().perform();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 test.log(LogStatus.INFO, "Step 10 :Most frequent contacted on whatsApp has been clicked successfully");
-                Thread.sleep(2000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("midMaxWait")));
                 driver.findElement(By.xpath(whatsAppImageButton)).click();
                 test.log(LogStatus.INFO, "Step 10 :WhatsApp Send has been clicked successfully");
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 System.out.println(driver.findElement(By.xpath(editTextDynamic)).getText());
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 driver.findElement(By.xpath(whatsAppImageButton)).click();
                 test.log(LogStatus.PASS, "Step 11 :Share Link has been shared successfully");
                 driver.pressKeyCode(AndroidKeyCode.BACK);
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.pressKeyCode(AndroidKeyCode.BACK);
                 test.log(LogStatus.INFO, "Step 12 :Focus has been moved to Kirana Bazaar from WhatsApp successfully");
                 driver.findElement(By.xpath(dashboardMenu)).click();
@@ -753,13 +753,13 @@ public class MeraParceMainAppiumActivity {
                 int x= driver.findElement(By.xpath(homeMenu)).getLocation().x;
                 int y=driver.findElement(By.xpath(homeMenu)).getLocation().y;
                 TouchAction actions2= new TouchAction(driver);
-                actions2.press(x1,y1).waitAction(1000).moveTo(x,y).release().perform();
+                actions2.press(x1,y1).waitAction(Integer.parseInt(properties.getProperty("minWait"))).moveTo(x,y).release().perform();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 test.log(LogStatus.INFO, "Step 13 :Menu item has been scrolled successfully");
                 driver.findElement(By.xpath(logoutMenu)).click();
                 test.log(LogStatus.INFO, "Step 14 :Application has been logged out successfully");
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-                Thread.sleep(1000);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
              }
             else
             {
@@ -811,8 +811,8 @@ public class MeraParceMainAppiumActivity {
     @AfterSuite(alwaysRun = true)
     public void sendEmail() throws Exception
     {
-        //Thread.sleep(5000);
-       // SendEmail obj= new SendEmail();
+       // Thread.sleep(5000);
+      //  SendEmail obj= new SendEmail();
        // obj.CreateEmail();
     }
 

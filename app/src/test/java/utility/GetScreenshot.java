@@ -17,15 +17,15 @@ public class GetScreenshot {
     {
         TakesScreenshot tk= (TakesScreenshot)driver;
         File source= tk.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source,new File("C:/Users/Aaqib/AndroidStudioProjects/MeraParcel/app/src/screenshot/passed/"+name+"/"+timestamp()+".png"));
+        FileUtils.copyFile(source,new File("../app/src/screenshot/passed/"+name+"/"+timestamp()+".png"));
     }
 
     public static String CaptureScreenshotForFailTestCase(WebDriver driver, String name)throws Exception
     {
         TakesScreenshot tk= (TakesScreenshot)driver;
-        String dest="C:/Users/Aaqib/AndroidStudioProjects/MeraParcel/app/src/screenshot/failed/"+name+".png";
+        String dest="../app/src/screenshot/failed/"+name+".png";
         File source= tk.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source,new File("C:/Users/Aaqib/AndroidStudioProjects/MeraParcel/app/src/screenshot/failed/"+name+".png"));
+        FileUtils.copyFile(source,new File("../app/src/screenshot/failed/"+name+".png"));
         return dest;
     }
 }
