@@ -21,5 +21,6 @@
 /app/proguard-rules.pro
 /app/src/androidTest/java/com/example/meraparcel/ExampleInstrumentedTest.java
 /gradle/wrapper/*
-app/src/main/AndroidManifest.xml
+./AndroidManifest.xml
 app/src/test/java/utility/capability.java
+./capability.java
