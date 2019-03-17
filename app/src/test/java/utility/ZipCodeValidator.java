@@ -1,5 +1,8 @@
 package utility;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ZipCodeValidator {
 
 
@@ -13,7 +16,7 @@ public class ZipCodeValidator {
         pattern=Pattern.compile(zipcodePattern);
     }
 
-    public boolean validate (String ZipCode)
+    public boolean validate(String ZipCode)
     {
         matcher=pattern.matcher(ZipCode);
         return matcher.matches();

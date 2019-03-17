@@ -30,6 +30,7 @@ import utility.*;
 import static com.example.meraparcel.Locators.*;
 import static io.appium.java_client.android.Connection.AIRPLANE;
 import static utility.capability.*;
+import utility.ZipCodeValidator.*;
 
 
 public class MeraParceMainAppiumActivity {
@@ -46,6 +47,7 @@ public class MeraParceMainAppiumActivity {
     private final String propertyFilePath= "../app/src/test/java/utility/Data.properties";
     int iteration=1;
 
+    //private ZipCodeValidator zipCodeValidator;
 
     @BeforeTest(alwaysRun = true)
     public void setUp() throws Exception
@@ -773,7 +775,48 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.SKIP, "Test Case Skipped");
             driver.resetApp();
         }
+    }
 
+    @Test(priority=13,groups = { "functional" })
+    public void Validate_validPinCodeAtRegistrationPage()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 13, 1);
+            TestCaseType = objgetdata.GetData(0, 13, 2);
+            TestCaseDescription = objgetdata.GetData(0, 13, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_validPinCodeAtRegistrationPage");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if(driver.getConnection()!=AIRPLANE) {
+                wait = new WebDriverWait(driver, 20);
+                WebElement SignUpButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(signUpbtn)));
+                test.log(LogStatus.INFO, "Step 2 :Sign Up button is visible on Login Activity");
+                SignUpButton.click();
+                WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
+                pinCode.sendKeys(properties.getProperty("inValidPinCode"));
+                String es =pinCode.getText();
+                System.out.println(es);
+                ZipCodeValidator z= new ZipCodeValidator();
+                boolean b=z.validate(properties.getProperty("inValidPinCode"));
+                if(b==true)
+                {
+                    System.out.println("Valid Pin Code");
+                }
+                else{
+                    System.out.println("InValid Pin COde");
+                }
+            }
+            else{
+                test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e)
+        {
+            String ex=e.getMessage();
+            System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
+        }
     }
 
     @AfterMethod(alwaysRun = true)
@@ -781,7 +824,6 @@ public class MeraParceMainAppiumActivity {
     {
         if(result.getStatus()==ITestResult.FAILURE)
         {
-
             String errorPath=GetScreenshot.CaptureScreenshotForFailTestCase(driver,result.getName());
             String failedImage=test.addScreenCapture(errorPath);
             test.log(LogStatus.FAIL, "Failed", failedImage);
@@ -791,7 +833,6 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.SKIP, "Test Case Skipped is "+result.getName());
 
         }
-
         report.endTest(test);
 
     }
@@ -815,11 +856,6 @@ public class MeraParceMainAppiumActivity {
       //  SendEmail obj= new SendEmail();
        // obj.CreateEmail();
     }
-
-
-
-
-
 }
 
 

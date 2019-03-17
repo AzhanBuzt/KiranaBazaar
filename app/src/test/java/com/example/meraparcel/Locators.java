@@ -27,6 +27,10 @@ public static String notificationMenu="//android.widget.TextView[contains(@text,
 public static String notificationBack="//android.widget.ImageButton[@content-desc='Navigate up']";
 public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsApp')]";
 public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
+public static String editInPinCode="//android.widget.EditText[contains(@text, 'Pincode')]";
+
+
+
 
 
 
