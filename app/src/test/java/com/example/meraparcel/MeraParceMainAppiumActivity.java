@@ -2,7 +2,10 @@ package com.example.meraparcel;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
@@ -23,6 +26,7 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import excelSupport.DatafromExcel;
@@ -459,7 +463,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=9,groups = { "functional"})
+    @Test(priority=9,groups = { "functional1"})
     public void Validate_EmailSentToUser_WhileForgotPassword()
     {
         try {
@@ -777,7 +781,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=13,groups = { "functional1" })
+    @Test(priority=13,groups = { "functional" })
     public void Validate_validPinCodeAtRegistrationPage()
     {
         try {
@@ -791,33 +795,43 @@ public class MeraParceMainAppiumActivity {
                 WebElement SignUpButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(signUpbtn)));
                 test.log(LogStatus.INFO, "Step 2 :Sign Up button is visible on Login Activity");
                 SignUpButton.click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                test.log(LogStatus.INFO, "Step 3 :Sign Up button has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 ZipCodeValidator z= new ZipCodeValidator();
+                WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
                 for (int i = 3; i <= 7; i++) {
 
                     if (i==3)
                     {
-                        WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
+                        //it will validate the invalid scenario
                         pinCode.sendKeys(properties.getProperty("inValidPinCode"));
-                        test.log(LogStatus.INFO, "Step "+i + ":enter");
-                        String es =pinCode.getText();
-
+                        Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                        test.log(LogStatus.INFO, "Step "+ i + " (A): Invalid PinCode has been entered as "+properties.getProperty("inValidPinCode"));
                         boolean b=z.validate(properties.getProperty("inValidPinCode"));
                         Assert.assertFalse(b);
-                        test.log(LogStatus.INFO, "Step "+i + ":validate  invalid");
+                        GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                        test.log(LogStatus.INFO, "Step "+i + " (B): PinCode has been verified as invalid through Assertion");
                     }
 
                     if (i==4)
                     {
-                        WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
-                        pinCode.sendKeys(properties.getProperty("ValidPinCode"));
-                        test.log(LogStatus.INFO, "Step "+i + ":enter as"+properties.getProperty("ValidPinCode"));
-
-                        boolean b=z.validate(properties.getProperty("ValidPinCode"));
+                        //it will validate the valid scenario
+                        pinCode.sendKeys(properties.getProperty("validPinCode"));
+                        Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                        test.log(LogStatus.INFO, "Step "+ i + " (A): Valid PinCode has been entered as "+properties.getProperty("validPinCode"));
+                        boolean b=z.validate(properties.getProperty("validPinCode"));
                         Assert.assertTrue(b);
-                        test.log(LogStatus.INFO, "Step "+i + ":validate validate");
+                        GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                        test.log(LogStatus.INFO, "Step "+i + " (B): PinCode has been verified as valid through Assertion");
                     }
 
                 }
+                String asd = ZipCodeValidator.sendRequest("http://postalpincode.in/api/pincode/211016");
+                System.out.println(asd);
+                //ZipCodeValidator.parseFromJSONResponse(asd);
+
+
             }
             else{
                 test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - "+driver.getConnection());
