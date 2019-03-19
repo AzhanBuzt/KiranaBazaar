@@ -8,6 +8,7 @@
 <include name="navigation" />
 <include name="login" />
 <include name="share" />
+<include name="search" />
 </run></groups>
     <classes>
       <class name="com.example.meraparcel.MeraParceMainAppiumActivity"/>

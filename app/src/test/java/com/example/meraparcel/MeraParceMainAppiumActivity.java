@@ -2,7 +2,10 @@ package com.example.meraparcel;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
@@ -23,6 +26,7 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import excelSupport.DatafromExcel;
@@ -30,6 +34,7 @@ import utility.*;
 import static com.example.meraparcel.Locators.*;
 import static io.appium.java_client.android.Connection.AIRPLANE;
 import static utility.capability.*;
+import utility.ZipCodeValidator.*;
 
 
 public class MeraParceMainAppiumActivity {
@@ -46,6 +51,7 @@ public class MeraParceMainAppiumActivity {
     private final String propertyFilePath= "../app/src/test/java/utility/Data.properties";
     int iteration=1;
 
+    //private ZipCodeValidator zipCodeValidator;
 
     @BeforeTest(alwaysRun = true)
     public void setUp() throws Exception
@@ -457,7 +463,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=9,groups = { "functional1"})
+    @Test(priority=9,groups = { "functional"})
     public void Validate_EmailSentToUser_WhileForgotPassword()
     {
         try {
@@ -773,10 +779,76 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.SKIP, "Test Case Skipped");
             driver.resetApp();
         }
-
     }
 
-    @Test(priority=14,groups = { "search"})
+    @Test(priority=14,groups = { "functional" })
+    public void Validate_validPinCodeAtRegistrationPage()
+    {
+        try {
+            TestCaseName = objgetdata.GetData(0, 13, 1);
+            TestCaseType = objgetdata.GetData(0, 13, 2);
+            TestCaseDescription = objgetdata.GetData(0, 13, 3);
+            test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_validPinCodeAtRegistrationPage");
+            test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+            if(driver.getConnection()!=AIRPLANE) {
+                wait = new WebDriverWait(driver, 20);
+                WebElement SignUpButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(signUpbtn)));
+                test.log(LogStatus.INFO, "Step 2 :Sign Up button is visible on Login Activity");
+                SignUpButton.click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                test.log(LogStatus.INFO, "Step 3 :Sign Up button has been clicked successfully");
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                ZipCodeValidator z= new ZipCodeValidator();
+                WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
+                for (int i = 3; i <= 7; i++) {
+
+                    if (i==3)
+                    {
+                        //it will validate the invalid scenario
+                        pinCode.sendKeys(properties.getProperty("inValidPinCode"));
+                        Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                        test.log(LogStatus.INFO, "Step "+ i + " (A): Invalid PinCode has been entered as "+properties.getProperty("inValidPinCode"));
+                        boolean b=z.validate(properties.getProperty("inValidPinCode"));
+                        Assert.assertFalse(b);
+                        GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                        test.log(LogStatus.INFO, "Step "+i + " (B): PinCode has been verified as invalid through Assertion");
+                    }
+
+                    if (i==4)
+                    {
+                        //it will validate the valid scenario
+                        pinCode.sendKeys(properties.getProperty("validPinCode"));
+                        Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                        test.log(LogStatus.INFO, "Step "+ i + " (A): Valid PinCode has been entered as "+properties.getProperty("validPinCode"));
+                        boolean b=z.validate(properties.getProperty("validPinCode"));
+                        Assert.assertTrue(b);
+                        GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                        test.log(LogStatus.INFO, "Step "+i + " (B): PinCode has been verified as valid through Assertion");
+                    }
+
+                }
+                String asd = ZipCodeValidator.sendRequest("http://postalpincode.in/api/pincode/211016");
+                System.out.println(asd);
+                driver.pressKeyCode(AndroidKeyCode.BACK);
+                //ZipCodeValidator.parseFromJSONResponse(asd);
+
+
+            }
+            else{
+                test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - "+driver.getConnection());
+                test.log(LogStatus.SKIP, "Test Case Skipped");
+            }
+        }
+        catch (Exception e)
+        {
+            String ex=e.getMessage();
+            System.out.println(ex);
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+            driver.resetApp();
+        }
+    }
+
+    @Test(priority=13,groups = { "search"})
     public void Positive_Negative_Search()
     {
         try {
@@ -868,7 +940,6 @@ public class MeraParceMainAppiumActivity {
     {
         if(result.getStatus()==ITestResult.FAILURE)
         {
-
             String errorPath=GetScreenshot.CaptureScreenshotForFailTestCase(driver,result.getName());
             String failedImage=test.addScreenCapture(errorPath);
             test.log(LogStatus.FAIL, "Failed", failedImage);
@@ -878,7 +949,6 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.SKIP, "Test Case Skipped is "+result.getName());
 
         }
-
         report.endTest(test);
 
     }
@@ -898,15 +968,10 @@ public class MeraParceMainAppiumActivity {
     @AfterSuite(alwaysRun = true)
     public void sendEmail() throws Exception
     {
-       // Thread.sleep(5000);
-      //  SendEmail obj= new SendEmail();
-       // obj.CreateEmail();
+       //Thread.sleep(5000);
+       //SendEmail obj= new SendEmail();
+       //obj.CreateEmail();
     }
-
-
-
-
-
 }
 
 

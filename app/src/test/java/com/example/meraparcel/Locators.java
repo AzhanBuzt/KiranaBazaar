@@ -29,6 +29,10 @@ public static String notificationBack="//android.widget.ImageButton[@content-des
 public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsApp')]";
 public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
 public static String searchBackBtn="//android.widget.ImageView[1]";
+public static String editInPinCode="//android.widget.EditText[@index='4']";
+
+
+
 
 
 
