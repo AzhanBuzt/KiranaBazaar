@@ -777,7 +777,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=13,groups = { "functional" })
+    @Test(priority=13,groups = { "functional1" })
     public void Validate_validPinCodeAtRegistrationPage()
     {
         try {
@@ -791,18 +791,32 @@ public class MeraParceMainAppiumActivity {
                 WebElement SignUpButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(signUpbtn)));
                 test.log(LogStatus.INFO, "Step 2 :Sign Up button is visible on Login Activity");
                 SignUpButton.click();
-                WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
-                pinCode.sendKeys(properties.getProperty("inValidPinCode"));
-                String es =pinCode.getText();
-                System.out.println(es);
                 ZipCodeValidator z= new ZipCodeValidator();
-                boolean b=z.validate(properties.getProperty("inValidPinCode"));
-                if(b==true)
-                {
-                    System.out.println("Valid Pin Code");
-                }
-                else{
-                    System.out.println("InValid Pin COde");
+                for (int i = 3; i <= 7; i++) {
+
+                    if (i==3)
+                    {
+                        WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
+                        pinCode.sendKeys(properties.getProperty("inValidPinCode"));
+                        test.log(LogStatus.INFO, "Step "+i + ":enter");
+                        String es =pinCode.getText();
+
+                        boolean b=z.validate(properties.getProperty("inValidPinCode"));
+                        Assert.assertFalse(b);
+                        test.log(LogStatus.INFO, "Step "+i + ":validate  invalid");
+                    }
+
+                    if (i==4)
+                    {
+                        WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
+                        pinCode.sendKeys(properties.getProperty("ValidPinCode"));
+                        test.log(LogStatus.INFO, "Step "+i + ":enter as"+properties.getProperty("ValidPinCode"));
+
+                        boolean b=z.validate(properties.getProperty("ValidPinCode"));
+                        Assert.assertTrue(b);
+                        test.log(LogStatus.INFO, "Step "+i + ":validate validate");
+                    }
+
                 }
             }
             else{
