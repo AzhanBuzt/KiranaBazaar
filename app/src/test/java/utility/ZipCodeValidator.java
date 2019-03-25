@@ -30,7 +30,7 @@ public class ZipCodeValidator {
         pattern=Pattern.compile(zipcodePattern);
     }
 
-    public boolean validate(String ZipCode)
+    public boolean validate (String ZipCode)
     {
         matcher=pattern.matcher(ZipCode);
         return matcher.matches();
@@ -79,7 +79,7 @@ public class ZipCodeValidator {
                 System.out.println(post_id);
 
             }
-            
+
             //JSONObject jsonObj1 = myjson.getJSONObject("PostOffice");
             //JSONArray jsonObj2 = jsonObj1.getJSONArray("PostOffice");
             //JSONObject jsonObj3 = jsonObj2.getJSONObject(0);
@@ -91,5 +91,3 @@ public class ZipCodeValidator {
         }
     }
 }
-
-

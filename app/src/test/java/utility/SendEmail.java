@@ -60,7 +60,7 @@ public class SendEmail {
             message.setFrom(new InternetAddress("infoattechbuzz@gmail.com"));
 
             // Set the recipient address
-            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("aaqib1741992@gmail.com,md.saquib11@gmail.com,adnan0977@gmail.com,khan5605@gmail.com,danisha073@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("aaqib1741992@gmail.com,md.saquib11@gmail.com,adnan0977@gmail.com,khan5605@gmail.com"));
 
             // Add the subject link
             message.setSubject("Kirana Bazaar Test Automation Report");
@@ -75,7 +75,7 @@ public class SendEmail {
             MimeBodyPart messageBodyPart2 = new MimeBodyPart();
 
             // Mention the file which you want to send
-            String filename = "C:/Users/Aaqib/AndroidStudioProjects/MeraParcel/app/src/report/Extentreport.html";
+            String filename = "../app/src/report/Extentreport.html";
 
             // Create data source and pass the filename
             DataSource source = new FileDataSource(filename);
