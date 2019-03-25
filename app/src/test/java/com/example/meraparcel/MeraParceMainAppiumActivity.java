@@ -781,7 +781,7 @@ public class MeraParceMainAppiumActivity {
         }
     }
 
-    @Test(priority=14,groups = { "functional" })
+    @Test(priority=14,groups = { "functional1" })
     public void Validate_validPinCodeAtRegistrationPage()
     {
         try {
@@ -800,7 +800,7 @@ public class MeraParceMainAppiumActivity {
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 ZipCodeValidator z= new ZipCodeValidator();
                 WebElement pinCode = driver.findElement(By.xpath(editInPinCode));
-                for (int i = 3; i <= 7; i++) {
+                for (int i = 3; i <= 6; i++) {
 
                     if (i==3)
                     {
@@ -825,14 +825,54 @@ public class MeraParceMainAppiumActivity {
                         GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                         test.log(LogStatus.INFO, "Step "+i + " (B): PinCode has been verified as valid through Assertion");
                     }
+                    if (i==5)
+                    {
+                        //it will validate the max length of char is allowed for zipCode field
+                        String length="";
+                        pinCode.clear();
+                        test.log(LogStatus.INFO, "Step "+ i + " (A): Char sequence will be inserted automatically and verify max length");
+                        for(int input=0;;input++)
+                        {
+                            length=length.concat(String.valueOf(input));
+                            pinCode.sendKeys(length);
+                            if(pinCode.getText().length()==input)
+                            {
+                                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                                test.log(LogStatus.INFO, "Step "+ i + " (B): Only "+pinCode.getText().length()+" char entry is allowed in pincode");
+                                break;
+                                //to break the loop
+                            }}
+                    }
+                    if (i==6)
+                    {
+                        //it will validate the pinCode and address for DDU(Deen-Dayal-Upadhyay Junction) from PostalAPi
+                        String JsonStringData = ZipCodeValidator.sendRequest(properties.getProperty("zipCodeApi"));
+                        if(!JsonStringData.isEmpty()) {
+                            test.log(LogStatus.INFO, "Step " + i + " (A): JsonString received from APi " + JsonStringData);
+                            String local = ZipCodeValidator.parseFromJSONResponse(JsonStringData);
+                            test.log(LogStatus.INFO, "Step " + i + " (B): Names has been parsed from JsonString received from APi " + local);
+                            String[] arrayOfNames = local.split("\\s*,\\s*");
+                            int ArrayItems = arrayOfNames.length;
+                            for (int lc = 0; lc < ArrayItems; lc++) {
+                                driver.findElement(By.xpath(editInAddress)).clear();
+                                driver.findElement(By.xpath(editInAddress)).sendKeys(arrayOfNames[lc]);
+                                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                            }
 
+                        }
+                        else{
+
+                            test.log(LogStatus.WARNING, "APi has no response data when pinged.");
+                            test.log(LogStatus.SKIP, "Test Case Skipped");
+                        }
+
+                    }
                 }
-                String asd = ZipCodeValidator.sendRequest("http://postalpincode.in/api/pincode/211016");
-                System.out.println(asd);
-                driver.pressKeyCode(AndroidKeyCode.BACK);
-                //ZipCodeValidator.parseFromJSONResponse(asd);
-
-
+                driver.findElement(By.xpath(forgotBackBtn)).click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                test.log(LogStatus.INFO, "Step 7 : User is back at Login screen.");
             }
             else{
                 test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - "+driver.getConnection());
@@ -843,9 +883,10 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
+
         }
+
+
     }
 
     @Test(priority=13,groups = { "search"})
@@ -943,6 +984,7 @@ public class MeraParceMainAppiumActivity {
             String errorPath=GetScreenshot.CaptureScreenshotForFailTestCase(driver,result.getName());
             String failedImage=test.addScreenCapture(errorPath);
             test.log(LogStatus.FAIL, "Failed", failedImage);
+            driver.resetApp();
         }
         else if(result.getStatus()==ITestResult.SKIP)
         {
