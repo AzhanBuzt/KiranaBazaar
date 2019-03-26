@@ -1,5 +1,6 @@
 package utility;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,7 +10,6 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,9 +22,10 @@ public class ZipCodeValidator {
 
     //note in this expression below, each back slash is an escape character, so
     //the regular expression should be "\b[0-9]{5}(?:-[0-9]{4})?\b"
-    final static String zipcodePattern="\\b[0-9]{5}(?:-[0-9]{4})?\\b";
+    final static String zipcodePattern="\\b[0-9]{6}(?:-[0-9]{5})?\\b";
     private static Pattern pattern;
     private static Matcher matcher;
+    static String message="";
     public ZipCodeValidator()
     {
         pattern=Pattern.compile(zipcodePattern);
@@ -36,7 +37,8 @@ public class ZipCodeValidator {
         return matcher.matches();
     }
 
-    public static String sendRequest(String url) {
+    public static String sendRequest(String url)
+    {
         String result = "";
         try {
             HttpClient client = new DefaultHttpClient();
@@ -66,28 +68,31 @@ public class ZipCodeValidator {
         return result;
     }
 
-    public static void parseFromJSONResponse(String respo)
+    public static String parseFromJSONResponse(String respo)
     {
+        String nameOfPostOffice="";
 
         try
         {
-            JSONObject myjson = new JSONObject(respo);
-            JSONArray arr = myjson.getJSONArray("PostOffice");
-            for (int i = 0; i < arr.length(); i++)
+            JSONObject json = new JSONObject(respo);
+            //Parcing data from PostOffice tag in JsonString
+            final JSONArray geodata = json.getJSONArray("PostOffice");
+            final int n = geodata.length();
+            for (int i = 0; i < n; ++i)
             {
-                String post_id = arr.getJSONObject(i).getString("Name");
-                System.out.println(post_id);
-
+                 final JSONObject person = geodata.getJSONObject(i);
+                //fetching data from Name tag received through JsonString
+                nameOfPostOffice=person.getString("Name");
+                //creating comma separated string from Name tag received through JsonString
+                message += nameOfPostOffice + ",";
             }
-
-            //JSONObject jsonObj1 = myjson.getJSONObject("PostOffice");
-            //JSONArray jsonObj2 = jsonObj1.getJSONArray("PostOffice");
-            //JSONObject jsonObj3 = jsonObj2.getJSONObject(0);
-           // System.out.println(jsonObj3.getJSONObject("PostOffice"));
-            //System.out.println("here ===>>>"+jsonObj3.getJSONObject("PostOffice").get("Name").toString());
+            //removing last comma from separated string
+            message=StringUtils.substring(message, 0, message.length() - 1);
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
+        //passing list through return
+        return message;
     }
 }

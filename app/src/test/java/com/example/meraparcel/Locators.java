@@ -30,6 +30,7 @@ public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsA
 public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
 public static String searchBackBtn="//android.widget.ImageView[1]";
 public static String editInPinCode="//android.widget.EditText[@index='4']";
+public static String editInAddress="//android.widget.EditText[@index='5']";
 
 
 
