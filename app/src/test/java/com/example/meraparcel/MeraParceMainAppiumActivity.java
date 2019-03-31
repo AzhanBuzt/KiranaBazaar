@@ -2,10 +2,8 @@ package com.example.meraparcel;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.json.JSONObject;
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
@@ -26,7 +24,6 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import excelSupport.DatafromExcel;
@@ -34,7 +31,6 @@ import utility.*;
 import static com.example.meraparcel.Locators.*;
 import static io.appium.java_client.android.Connection.AIRPLANE;
 import static utility.capability.*;
-import utility.ZipCodeValidator.*;
 
 
 public class MeraParceMainAppiumActivity {
@@ -60,6 +56,10 @@ public class MeraParceMainAppiumActivity {
         reader = new BufferedReader(new FileReader(propertyFilePath));
         properties = new Properties();
         properties.load(reader);
+
+        //setting logs to project
+        PropertyConfigurator.configure(properties.getProperty("logFilePath"));
+
          // Created object of DesiredCapabilities class.
         DesiredCapabilities capabilities = new DesiredCapabilities();
        // Set android deviceName desired capability. Set your device name.
@@ -129,8 +129,6 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
     }
 
@@ -174,8 +172,6 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 }
 
@@ -220,8 +216,6 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 
     }
@@ -280,8 +274,6 @@ public class MeraParceMainAppiumActivity {
         {
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 
     }
@@ -307,8 +299,6 @@ public class MeraParceMainAppiumActivity {
     {
         String ex=e.getMessage();
         System.out.println(ex);
-        test.log(LogStatus.SKIP, "Test Case Skipped");
-        driver.resetApp();
     }
     }
 
@@ -343,8 +333,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
         String ex=e.getMessage();
         System.out.println(ex);
-        test.log(LogStatus.SKIP, "Test Case Skipped");
-        driver.resetApp();
     }}
 
     @Test(priority=7,groups = { "functional"})
@@ -397,8 +385,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }}
 
     @Test(priority=8,groups = { "functional"})
@@ -458,8 +444,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
     }
 
@@ -518,8 +502,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
     }
 
@@ -579,8 +561,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 
     }
@@ -686,8 +666,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 
     }
@@ -776,12 +754,10 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
     }
 
-    @Test(priority=14,groups = { "functional1" })
+    @Test(priority=13,groups = { "functional1" })
     public void Validate_validPinCodeAtRegistrationPage()
     {
         try {
@@ -889,7 +865,7 @@ public class MeraParceMainAppiumActivity {
 
     }
 
-    @Test(priority=13,groups = { "search"})
+    @Test(priority=14,groups = { "search"})
     public void Positive_Negative_Search()
     {
         try {
@@ -934,18 +910,23 @@ public class MeraParceMainAppiumActivity {
                 int positiveSearchResult=driver.findElements(By.xpath(itemText)).size();
                 Assert.assertEquals(positiveSearchResult,8);
                 test.log(LogStatus.INFO, "Step 9 :Search result has been verified Successfully");
+                driver.findElement(By.xpath(plusIcon)).click();
+                test.log(LogStatus.INFO, "Step 10 :Search item has been added to cart Successfully");
                 driver.findElement(By.xpath(editTextDynamic)).clear();
                 driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("negativeSearchValue").trim());
-                test.log(LogStatus.INFO, "Step 10 :Negative search text has been passed Successfully");
+                test.log(LogStatus.INFO, "Step 11 :Negative search text has been passed Successfully");
                 TouchAction searchIconInvalid= new TouchAction(driver);
                 searchIconInvalid.tap(945,102).release().perform();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                test.log(LogStatus.INFO, "Step 11 :Search icon has been clicked Successfully");
+                test.log(LogStatus.INFO, "Step 12 :Search icon has been clicked Successfully");
                 Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                 int negativeSearchResult=driver.findElements(By.xpath(itemText)).size();
                 Assert.assertEquals(negativeSearchResult,0);
-                test.log(LogStatus.INFO, "Step 12 :Search result has been verified Successfully");
+                test.log(LogStatus.INFO, "Step 13 :Search result has been verified Successfully");
                 driver.findElement(By.xpath(searchBackBtn)).click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
+                Assert.assertEquals(Integer.parseInt(driver.findElement(By.xpath(cartItemsCount)).getText()),1);
+                test.log(LogStatus.INFO, "Step 14 :Item has been successfully added to cart");
                 Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                 driver.findElement(By.xpath(dashboardMenu)).click();
                 int x1= driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
@@ -955,9 +936,42 @@ public class MeraParceMainAppiumActivity {
                 TouchAction actions2= new TouchAction(driver);
                 actions2.press(x1,y1).waitAction(Integer.parseInt(properties.getProperty("minWait"))).moveTo(x,y).release().perform();
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                test.log(LogStatus.INFO, "Step 13 :Menu item has been scrolled successfully");
+                test.log(LogStatus.INFO, "Step 15 :Menu item has been scrolled successfully");
                 driver.findElement(By.xpath(logoutMenu)).click();
-                test.log(LogStatus.INFO, "Step 14 :Application has been logged out successfully");
+                test.log(LogStatus.INFO, "Step 16 :Application has been logged out successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
+                test.log(LogStatus.INFO, "Step 17 :Current Activity is verified as Login");
+                driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+                driver.findElement(By.xpath(editTextDynamic)).clear();
+                driver.findElement(By.xpath(editPassDynamic)).clear();
+                test.log(LogStatus.INFO, "Step 18 :UserName and Password cleared Successfully");
+                driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                driver.findElement(By.xpath(loginbtn)).click();
+                test.log(LogStatus.INFO, "Step 19 :Login button has been clicked Successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+                Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+                test.log(LogStatus.INFO, "Step 20 :Current Activity is verified as "+driver.currentActivity());
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
+                Assert.assertEquals(Integer.parseInt(driver.findElement(By.xpath(cartItemsCount)).getText()),0);
+                test.log(LogStatus.INFO, "Step 21 : Cart Item has been not remembered at reLogin - Its a defect");
+                Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
+                driver.findElement(By.xpath(dashboardMenu)).click();
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                TouchAction actions3= new TouchAction(driver);
+                actions3.press(x1,y1).waitAction(Integer.parseInt(properties.getProperty("minWait"))).moveTo(x,y).release().perform();
+                GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                test.log(LogStatus.INFO, "Step 22 :Menu item has been scrolled successfully");
+                driver.findElement(By.xpath(logoutMenu)).click();
+                test.log(LogStatus.INFO, "Step 23 :Application has been logged out successfully");
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
                 Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             }
@@ -970,8 +984,6 @@ public class MeraParceMainAppiumActivity {
         catch (Exception e){
             String ex=e.getMessage();
             System.out.println(ex);
-            test.log(LogStatus.SKIP, "Test Case Skipped");
-            driver.resetApp();
         }
 
     }
