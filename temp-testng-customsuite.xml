@@ -4,7 +4,7 @@
   <test name="UI Test Run">
 <groups><run>
 <include name="ui" />
-<include name="functional" />
+<include name="functional1" />
 <include name="navigation" />
 <include name="login" />
 <include name="share" />
