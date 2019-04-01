@@ -675,7 +675,6 @@ public class MeraParceMainAppiumActivity {
 
     @Test(priority = 13, groups = {"functional"})
     public void Validate_validPinCodeAtRegistrationPage() throws Exception {
-
         TestCaseName = objgetdata.GetData(0, 13, 1);
         TestCaseType = objgetdata.GetData(0, 13, 2);
         TestCaseDescription = objgetdata.GetData(0, 13, 3);
