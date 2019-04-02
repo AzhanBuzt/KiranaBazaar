@@ -878,6 +878,43 @@ public class MeraParceMainAppiumActivity {
 
     }
 
+    @Test(priority = 15, groups = {"search"})
+    public void feedback_Functionality() throws Exception {
+
+        TestCaseName = objgetdata.GetData(0, 14, 1);
+        TestCaseType = objgetdata.GetData(0, 14, 2);
+        TestCaseDescription = objgetdata.GetData(0, 14, 3);
+        test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Positive_Negative_Search");
+        test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
+        if (driver.getConnection() != AIRPLANE) {
+            wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
+            Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
+            test.log(LogStatus.INFO, "Step 2 :Current Activity is verified as Login");
+            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+            driver.findElement(By.xpath(editTextDynamic)).clear();
+            driver.findElement(By.xpath(editPassDynamic)).clear();
+            test.log(LogStatus.INFO, "Step 3 :UserName and Password cleared Successfully");
+            driver.findElement(By.xpath(editTextDynamic)).sendKeys(properties.getProperty("validEmail").trim());
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            driver.findElement(By.xpath(editPassDynamic)).sendKeys(properties.getProperty("validPassword").trim());
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            driver.findElement(By.xpath(loginbtn)).click();
+            test.log(LogStatus.INFO, "Step 4 :Login button has been clicked Successfully");
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(dashboardActivity)));
+            Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("dashboardActivity")));
+            test.log(LogStatus.INFO, "Step 5 :Current Activity is verified as " + driver.currentActivity());
+            Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
+            
+        } else {
+            test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of " + driver.getConnection());
+            test.log(LogStatus.SKIP, "Test Case Skipped");
+        }
+
+    }
+
     @AfterMethod(alwaysRun = true)
     public void teardown(ITestResult result) throws Exception {
         if (result.getStatus() == ITestResult.FAILURE) {
