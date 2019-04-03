@@ -23,9 +23,9 @@ public class GetScreenshot {
     public static String CaptureScreenshotForFailTestCase(WebDriver driver, String name)throws Exception
     {
         TakesScreenshot tk= (TakesScreenshot)driver;
-        String dest="../screenshot/failed/"+name+".png";
+        String dest="../app/src/screenshot/failed/"+name+".png";
         File source= tk.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source,new File("../screenshot/failed/"+name+".png"));
+        FileUtils.copyFile(source,new File("../app/src/screenshot/failed/"+name+".png"));
         return dest;
     }
 }
