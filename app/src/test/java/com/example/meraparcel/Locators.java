@@ -25,8 +25,9 @@ public static String contactUsMenu="//android.widget.TextView[contains(@text, 'C
 public static String feedBackMenu="//android.widget.TextView[contains(@text, 'FeedBack')]";
 public static String editProfileMenu="//android.widget.TextView[contains(@text, 'Edit Profile')]";
 public static String notificationMenu="//android.widget.TextView[contains(@text, 'Notification')]";
-public static String notificationBack="//android.widget.ImageButton[@content-desc='Navigate up']";
+public static String searchBar="//android.widget.RelativeLayout[contains(@resource-id,'search')]";
 public static String whatsApp="//android.widget.TextView[contains(@text, 'WhatsApp')]";
+public static String whatsAppFrequentContact="//android.widget.RelativeLayout[position()=2]";
 public static String whatsAppImageButton="//android.widget.ImageButton[@content-desc='Send']";
 public static String searchBackBtn="//android.widget.ImageView[1]";
 public static String editInPinCode="//android.widget.EditText[@index='4']";
