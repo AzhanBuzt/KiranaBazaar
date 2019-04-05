@@ -29,6 +29,8 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +55,8 @@ public class MeraParceMainAppiumActivity {
     BufferedReader reader;
     private final String propertyFilePath = "../app/src/test/java/utility/Data.properties";
     int iteration = 1;
+    SimpleDateFormat formatter;
+    Date date;
 
     //private ZipCodeValidator zipCodeValidator;
 
@@ -62,7 +66,10 @@ public class MeraParceMainAppiumActivity {
         reader = new BufferedReader(new FileReader(propertyFilePath));
         properties = new Properties();
         properties.load(reader);
-
+        // fetching current Date & Time while Running the program"
+        formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        date = new Date();
+        System.out.println("Startup time of Script -->> "+formatter.format(date));
         //setting logs to project
         PropertyConfigurator.configure(properties.getProperty("logFilePath"));
         // Created object of DesiredCapabilities class.
@@ -226,8 +233,8 @@ public class MeraParceMainAppiumActivity {
                 Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 //clicking the login btn
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 test.log(LogStatus.INFO, "Step " + i + " : " + iteration + " iteration of login button has been clicked.");
-                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 String es = toastView.getText();
@@ -757,7 +764,7 @@ public class MeraParceMainAppiumActivity {
             driver.findElement(By.xpath(forgotBackBtn)).click();
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-            test.log(LogStatus.INFO, "Step 7 : User is back at Login screen.");
+            test.log(LogStatus.PASS, "Step 7 : User is back at Login screen.");
         } else {
             test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - " + driver.getConnection());
             test.log(LogStatus.SKIP, "Test Case Skipped");
@@ -856,7 +863,7 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.INFO, "Step 20 :Current Activity is verified as " + driver.currentActivity());
             Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
             Assert.assertEquals(Integer.parseInt(driver.findElement(By.xpath(cartItemsCount)).getText()), 0);
-            test.log(LogStatus.INFO, "Step 21 : Cart Item has been not remembered at reLogin - Its a defect");
+            test.log(LogStatus.PASS, "Step 21 : Cart Item has been not remembered at reLogin - Its a defect");
             Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
             driver.findElement(By.xpath(dashboardMenu)).click();
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
@@ -976,6 +983,8 @@ public class MeraParceMainAppiumActivity {
 
     @AfterSuite(alwaysRun = true)
     public void sendEmail() throws Exception {
+        date = new Date();
+        System.out.println("End time of Script -->> "+formatter.format(date));
         Thread.sleep(5000);
         //SendEmail obj= new SendEmail();
         // obj.CreateEmail();
