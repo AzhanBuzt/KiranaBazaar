@@ -34,6 +34,8 @@ public static String editInPinCode="//android.widget.EditText[@index='4']";
 public static String editInAddress="//android.widget.EditText[@index='5']";
 public static String plusIcon="//android.widget.ImageView[@index='4']";
 public static String cartItemsCount="//android.widget.TextView[@index='1']";
+public static String feedbackText="//android.widget.EditText[contains(@resource-id,'feedback')]";
+public static String feedBackSubmitButton="//android.widget.TextView[contains(@text, 'Send')]";
 
 
 
