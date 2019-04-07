@@ -883,7 +883,7 @@ public class MeraParceMainAppiumActivity {
 
     }
 
-    @Test(priority = 15, groups = {"search"})
+    @Test(priority = 15, groups = {"feedback"})
     public void feedback_Functionality() throws Exception {
 
         TestCaseName = objgetdata.GetData(0, 14, 1);
@@ -929,6 +929,27 @@ public class MeraParceMainAppiumActivity {
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             test.log(LogStatus.INFO, "Step 9 :Send button has been clicked Successfully");
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            WebElement toastView = driver.findElement(By.xpath(toastMessage));  //toast validation
+            test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
+            String es = toastView.getText();
+            Assert.assertTrue(es.contains(properties.getProperty("verifyFeedback")));
+            System.out.println("feedback toast has been verified--> "+es);
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            // here we need to implement length logic  run and verify - yes i know running the app now
+            //String length = "I am a text ";
+           /* driver.findElement(By.xpath(feedbackText)).clear();
+            test.log(LogStatus.INFO, "Step 8 Char sequence will be inserted automatically and verify max length");
+            for (int input = 0; ; input++) {
+                length = length.concat(String.valueOf(input));
+                driver.findElement(By.xpath(feedbackText)).sendKeys(length);
+                if (driver.findElement(By.xpath(feedbackText)).getText().length() == input) {
+                    GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                    test.log(LogStatus.INFO, "Step 9 Only " + driver.findElement(By.xpath(feedbackText)).getText().length() + " char entry is allowed in feedback");
+                    break;
+                    //to break the loop
+                }
+            }*/
+
             driver.findElement(By.xpath(dashboardMenu)).click();
             test.log(LogStatus.INFO, "Step 10 :Tap on Dashboard has been Successfully");
             int x1 = driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
