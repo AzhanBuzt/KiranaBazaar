@@ -5,6 +5,8 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -44,6 +46,7 @@ import static utility.capability.*;
 
 public class MeraParceMainAppiumActivity {
 
+    final static Logger logger = Logger.getLogger(MeraParceMainAppiumActivity.class);
     static AndroidDriver driver;
 
     WebDriverWait wait;
@@ -921,7 +924,34 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.INFO, "Step 7 :FeedBack EditText has been cleared Successfully");
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
-            driver.findElement(By.xpath(feedbackText)).sendKeys(properties.getProperty("feedBackText"));
+            WebElement fdText=driver.findElement(By.xpath(feedbackText));
+            // Implemented Logic to verify the max length of feedback editText
+            String length = properties.getProperty("longString");
+            // Sample string coming from Data file
+            fdText.clear();
+            test.log(LogStatus.INFO, "Step 8 Char sequence will be inserted automatically and verify max length");
+            for (int input = 1; ; input++) {
+                // Starting of loop
+                length = length.concat(length);
+                //concat the string
+                fdText.sendKeys(length);
+                //send the concatinated string
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                int wordCount = StringUtils.countMatches(fdText.getText().trim(), "maxlength");
+                //Word count maxlegnth in string
+                logger.error("wordcount :"+wordCount);
+                if (wordCount == input||wordCount>=125) {
+                    //match wordcount>125 because no maxlength is set for this editText
+                    logger.error("When wordcount==input: "+ wordCount);
+                    GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                    test.log(LogStatus.INFO, "Step 9 Only " + fdText.getText().length() + " char entry is allowed in feedback");
+                    logger.error("Character length at present"+ fdText.getText().length());
+                    break;
+                    //to break the loop
+                }
+            }
+            fdText.clear();
+            fdText.sendKeys(properties.getProperty("feedBackText"));
             test.log(LogStatus.INFO, "Step 8 : Feedback has ben entered in EditText successfully.");
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
@@ -935,21 +965,6 @@ public class MeraParceMainAppiumActivity {
             Assert.assertTrue(es.contains(properties.getProperty("verifyFeedback")));
             System.out.println("feedback toast has been verified--> "+es);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
-            // here we need to implement length logic  run and verify - yes i know running the app now
-            //String length = "I am a text ";
-           /* driver.findElement(By.xpath(feedbackText)).clear();
-            test.log(LogStatus.INFO, "Step 8 Char sequence will be inserted automatically and verify max length");
-            for (int input = 0; ; input++) {
-                length = length.concat(String.valueOf(input));
-                driver.findElement(By.xpath(feedbackText)).sendKeys(length);
-                if (driver.findElement(By.xpath(feedbackText)).getText().length() == input) {
-                    GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
-                    test.log(LogStatus.INFO, "Step 9 Only " + driver.findElement(By.xpath(feedbackText)).getText().length() + " char entry is allowed in feedback");
-                    break;
-                    //to break the loop
-                }
-            }*/
-
             driver.findElement(By.xpath(dashboardMenu)).click();
             test.log(LogStatus.INFO, "Step 10 :Tap on Dashboard has been Successfully");
             int x1 = driver.findElement(By.xpath(shareAppMenu)).getLocation().x;
@@ -967,8 +982,6 @@ public class MeraParceMainAppiumActivity {
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
             test.log(LogStatus.INFO, "Step 13 :Current Activity is verified as Login");
-
-            
         } else {
             test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of " + driver.getConnection());
             test.log(LogStatus.SKIP, "Test Case Skipped");
