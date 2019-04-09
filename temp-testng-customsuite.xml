@@ -3,12 +3,12 @@
 <suite name="Kirana Bazaar Suite">
   <test name="UI Test Run">
 <groups><run>
-<!--<include name="ui" />
+<include name="ui" />
 <include name="functional" />
 <include name="navigation" />
 <include name="login" />
 <include name="share" />
-<include name="search" />-->
+<include name="search" />
 <include name="feedback" />
 </run></groups>
     <classes>

@@ -925,27 +925,18 @@ public class MeraParceMainAppiumActivity {
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             WebElement fdText=driver.findElement(By.xpath(feedbackText));
-            // Implemented Logic to verify the max length of feedback editText
             String length = properties.getProperty("longString");
-            // Sample string coming from Data file
             fdText.clear();
             test.log(LogStatus.INFO, "Step 8 Char sequence will be inserted automatically and verify max length");
             for (int input = 1; ; input++) {
-                // Starting of loop
                 length = length.concat(length);
-                //concat the string
                 fdText.sendKeys(length);
-                //send the concatinated string
                 Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 int wordCount = StringUtils.countMatches(fdText.getText().trim(), "maxlength");
-                //Word count maxlegnth in string
-                logger.error("wordcount :"+wordCount);
                 if (wordCount == input||wordCount>=125) {
-                    //match wordcount>125 because no maxlength is set for this editText
-                    logger.error("When wordcount==input: "+ wordCount);
                     GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                    System.out.println("Maximum length verified successfully "+ wordCount);
                     test.log(LogStatus.INFO, "Step 9 Only " + fdText.getText().length() + " char entry is allowed in feedback");
-                    logger.error("Character length at present"+ fdText.getText().length());
                     break;
                     //to break the loop
                 }
