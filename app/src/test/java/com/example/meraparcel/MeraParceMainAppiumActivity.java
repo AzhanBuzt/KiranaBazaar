@@ -5,6 +5,8 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -29,6 +31,8 @@ import org.testng.annotations.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +46,7 @@ import static utility.capability.*;
 
 public class MeraParceMainAppiumActivity {
 
+    final static Logger logger = Logger.getLogger(MeraParceMainAppiumActivity.class);
     static AndroidDriver driver;
 
     WebDriverWait wait;
@@ -53,6 +58,8 @@ public class MeraParceMainAppiumActivity {
     BufferedReader reader;
     private final String propertyFilePath = "../app/src/test/java/utility/Data.properties";
     int iteration = 1;
+    SimpleDateFormat formatter;
+    Date date;
 
     //private ZipCodeValidator zipCodeValidator;
 
@@ -62,7 +69,10 @@ public class MeraParceMainAppiumActivity {
         reader = new BufferedReader(new FileReader(propertyFilePath));
         properties = new Properties();
         properties.load(reader);
-
+        // fetching current Date & Time while Running the program"
+        formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        date = new Date();
+        System.out.println("Startup time of Script -->> "+formatter.format(date));
         //setting logs to project
         PropertyConfigurator.configure(properties.getProperty("logFilePath"));
         // Created object of DesiredCapabilities class.
@@ -226,8 +236,8 @@ public class MeraParceMainAppiumActivity {
                 Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 driver.findElement(By.xpath(loginbtn)).click();
                 //clicking the login btn
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
                 test.log(LogStatus.INFO, "Step " + i + " : " + iteration + " iteration of login button has been clicked.");
-                Thread.sleep(Integer.parseInt(properties.getProperty("midWait")));
                 GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
                 WebElement toastView = driver.findElement(By.xpath(toastMessage));
                 String es = toastView.getText();
@@ -757,7 +767,7 @@ public class MeraParceMainAppiumActivity {
             driver.findElement(By.xpath(forgotBackBtn)).click();
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(forgotPasswordLink)));
-            test.log(LogStatus.INFO, "Step 7 : User is back at Login screen.");
+            test.log(LogStatus.PASS, "Step 7 : User is back at Login screen.");
         } else {
             test.log(LogStatus.WARNING, "Test Case has been Skipped because Internet is unavailable - " + driver.getConnection());
             test.log(LogStatus.SKIP, "Test Case Skipped");
@@ -856,7 +866,7 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.INFO, "Step 20 :Current Activity is verified as " + driver.currentActivity());
             Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
             Assert.assertEquals(Integer.parseInt(driver.findElement(By.xpath(cartItemsCount)).getText()), 0);
-            test.log(LogStatus.INFO, "Step 21 : Cart Item has been not remembered at reLogin - Its a defect");
+            test.log(LogStatus.PASS, "Step 21 : Cart Item has been not remembered at reLogin - Its a defect");
             Thread.sleep(Integer.parseInt(properties.getProperty("minMidWait")));
             driver.findElement(By.xpath(dashboardMenu)).click();
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
@@ -876,13 +886,13 @@ public class MeraParceMainAppiumActivity {
 
     }
 
-    @Test(priority = 15, groups = {"search"})
+    @Test(priority = 15, groups = {"feedback"})
     public void feedback_Functionality() throws Exception {
 
         TestCaseName = objgetdata.GetData(0, 14, 1);
         TestCaseType = objgetdata.GetData(0, 14, 2);
         TestCaseDescription = objgetdata.GetData(0, 14, 3);
-        test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Positive_Negative_Search");
+        test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_Feedback");
         test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
         if (driver.getConnection() != AIRPLANE) {
             wait = new WebDriverWait(driver, 10);
@@ -914,13 +924,37 @@ public class MeraParceMainAppiumActivity {
             test.log(LogStatus.INFO, "Step 7 :FeedBack EditText has been cleared Successfully");
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
-            driver.findElement(By.xpath(feedbackText)).sendKeys(properties.getProperty("feedBackText"));
+            WebElement fdText=driver.findElement(By.xpath(feedbackText));
+            String length = properties.getProperty("longString");
+            fdText.clear();
+            test.log(LogStatus.INFO, "Step 8 Char sequence will be inserted automatically and verify max length");
+            for (int input = 1; ; input++) {
+                length = length.concat(length);
+                fdText.sendKeys(length);
+                Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+                int wordCount = StringUtils.countMatches(fdText.getText().trim(), "maxlength");
+                if (wordCount == input||wordCount>=125) {
+                    GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
+                    System.out.println("Maximum length verified successfully "+ wordCount);
+                    test.log(LogStatus.INFO, "Step 9 Only " + fdText.getText().length() + " char entry is allowed in feedback");
+                    break;
+                    //to break the loop
+                }
+            }
+            fdText.clear();
+            fdText.sendKeys(properties.getProperty("feedBackText"));
             test.log(LogStatus.INFO, "Step 8 : Feedback has ben entered in EditText successfully.");
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             driver.findElement(By.xpath(feedBackSubmitButton)).click();
             GetScreenshot.CaptureScreenshotForPassTestCase(driver, TestCaseName);
             test.log(LogStatus.INFO, "Step 9 :Send button has been clicked Successfully");
+            Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
+            WebElement toastView = driver.findElement(By.xpath(toastMessage));  //toast validation
+            test.log(LogStatus.INFO, "Step 7 : Toast Message text has been captured.");
+            String es = toastView.getText();
+            Assert.assertTrue(es.contains(properties.getProperty("verifyFeedback")));
+            System.out.println("feedback toast has been verified--> "+es);
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             driver.findElement(By.xpath(dashboardMenu)).click();
             test.log(LogStatus.INFO, "Step 10 :Tap on Dashboard has been Successfully");
@@ -939,8 +973,6 @@ public class MeraParceMainAppiumActivity {
             Thread.sleep(Integer.parseInt(properties.getProperty("minWait")));
             Assert.assertTrue(driver.currentActivity().equals(properties.getProperty("loginActivity")));
             test.log(LogStatus.INFO, "Step 13 :Current Activity is verified as Login");
-
-            
         } else {
             test.log(LogStatus.INFO, "Step 2 : Current Connectivity is of " + driver.getConnection());
             test.log(LogStatus.SKIP, "Test Case Skipped");
@@ -976,6 +1008,8 @@ public class MeraParceMainAppiumActivity {
 
     @AfterSuite(alwaysRun = true)
     public void sendEmail() throws Exception {
+        date = new Date();
+        System.out.println("End time of Script -->> "+formatter.format(date));
         Thread.sleep(5000);
         //SendEmail obj= new SendEmail();
         // obj.CreateEmail();
