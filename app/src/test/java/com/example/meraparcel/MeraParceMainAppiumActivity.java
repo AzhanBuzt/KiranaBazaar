@@ -892,7 +892,7 @@ public class MeraParceMainAppiumActivity {
         TestCaseName = objgetdata.GetData(0, 14, 1);
         TestCaseType = objgetdata.GetData(0, 14, 2);
         TestCaseDescription = objgetdata.GetData(0, 14, 3);
-        test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Positive_Negative_Search");
+        test = report.startTest(TestCaseName, TestCaseDescription).assignCategory(TestCaseType, "Validate_Feedback");
         test.log(LogStatus.INFO, "Step 1 :Test Case Started Successfully.");
         if (driver.getConnection() != AIRPLANE) {
             wait = new WebDriverWait(driver, 10);
