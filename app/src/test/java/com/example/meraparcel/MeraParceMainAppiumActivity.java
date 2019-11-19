@@ -29,6 +29,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class MeraParceMainAppiumActivity {
     public String TestCaseName, TestCaseType, TestCaseDescription;
     private Properties properties;
     BufferedReader reader;
-    private final String propertyFilePath = "../app/src/test/java/utility/Data.properties";
+    private final String propertyFilePath = "src/test/java/utility/Data.properties";
     int iteration = 1;
     SimpleDateFormat formatter;
     Date date;
@@ -66,7 +67,7 @@ public class MeraParceMainAppiumActivity {
     @BeforeTest(alwaysRun = true)
     public void setUp() throws Exception {
         //Loading Property Details
-        reader = new BufferedReader(new FileReader(propertyFilePath));
+        reader = new BufferedReader(new FileReader(System.getProperty("user.dir") + File.separator + propertyFilePath));
         properties = new Properties();
         properties.load(reader);
         // fetching current Date & Time while Running the program"
@@ -74,7 +75,7 @@ public class MeraParceMainAppiumActivity {
         date = new Date();
         System.out.println("Startup time of Script -->> "+formatter.format(date));
         //setting logs to project
-        PropertyConfigurator.configure(properties.getProperty("logFilePath"));
+        PropertyConfigurator.configure(System.getProperty("user.dir") + File.separator+ properties.getProperty("logFilePath"));
         // Created object of DesiredCapabilities class.
         DesiredCapabilities capabilities = new DesiredCapabilities();
         // Set android deviceName desired capability. Set your device name.
@@ -99,8 +100,8 @@ public class MeraParceMainAppiumActivity {
         capabilities.setCapability("autoAcceptAlerts", t);
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        objgetdata = new DatafromExcel(properties.getProperty("excelSheetPath"));
-        report = new ExtentReports(properties.getProperty("extentReportPath"), true);
+        objgetdata = new DatafromExcel(System.getProperty("user.dir") + File.separator+ properties.getProperty("excelSheetPath"));
+        report = new ExtentReports(System.getProperty("user.dir") + File.separator+ properties.getProperty("extentReportPath"), true);
         report.addSystemInfo("Extent Report Version", "2.05");
         report.addSystemInfo("Environment", "Test");
         report.config()
